@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const Routesusers = require("./../routes/user");
+const { conectionDB } =  require('./../database/config');
 
 class Server {
 
@@ -9,16 +10,22 @@ class Server {
     this.port = process.env.PORT;
     this.usersPath = "/api/usuarios";
     this.routerUsers = Routesusers;
+  
+    this.doConexionDB();
     this.middleware();
     this.routes();
   }
 
   middleware() {
     ///letura y parceo del body
-   
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(express.static("public"));
+  }
+
+
+  async doConexionDB(){
+    await conectionDB();
   }
 
   routes() {

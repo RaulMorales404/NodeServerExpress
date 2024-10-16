@@ -1,26 +1,36 @@
 const { response, request } = require("express");
+const UserModel = require("./../models/usuarios");
+const bcrypt = require("bcryptjs");
 
 const getUsers = (req = request, res = response) => {
-    const params = req.query;
+  const params = req.query;
   res.json({
     status: 200,
-    message: "GET Peticion a mi appi",params
+    message: "GET Peticion a mi appi",
+    params,
   });
 };
 
 const putUsers = (req, res = response) => {
-    const id = req.params.id
+  const id = req.params.id;
   res.json({
     status: 200,
-    message: "PUT Peticion a mi appi",id,
+    message: "PUT Peticion a mi appi",
+    id,
   });
 };
 
-const postUser = (req, res = response) => {
-    const {name,age,id,lastName} = req.body
+const postUser = async (req, res = response) => {
+  const { name, password, rol, email } = req.body;
+  const usuario = new UserModel({ name, password, rol, email });
+
+  const salt = await bcrypt.genSaltSync();
+  usuario.password = bcrypt.hashSync(password, salt);
+
+  await usuario.save();
+
   res.json({
-    status: 200,
-    message: "POST Peticion a mi appi",body,
+    usuario,
   });
 };
 
