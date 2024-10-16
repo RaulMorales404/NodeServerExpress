@@ -11,23 +11,34 @@ const getUsers = (req = request, res = response) => {
   });
 };
 
-const putUsers = (req, res = response) => {
+const putUsers = async (req, res = response) => {
+
   const id = req.params.id;
+  const { _id,password, googleAcount,email, ...rest } = req.body;
+
+  if (password) {
+    const salt = await bcrypt.genSaltSync();
+    rest.password = bcrypt.hashSync(password, salt);
+  }
+
+  const user = await UserModel.findByIdAndUpdate(id, rest);
+
   res.json({
     status: 200,
     message: "PUT Peticion a mi appi",
+    user,
     id,
   });
 };
 
 const postUser = async (req, res = response) => {
   const { name, password, rol, email } = req.body;
-  const usuario = new UserModel({ name, password, rol, email });
+  const user = new UserModel({ name, password, rol, email });
 
   const salt = await bcrypt.genSaltSync();
-  usuario.password = bcrypt.hashSync(password, salt);
+  user.password = bcrypt.hashSync(password, salt);
 
-  await usuario.save();
+  await user.save();
 
   res.json({
     usuario,
