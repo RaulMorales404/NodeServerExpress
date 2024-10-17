@@ -2,30 +2,35 @@ const { response, request } = require("express");
 const UserModel = require("./../models/usuarios");
 const bcrypt = require("bcryptjs");
 
-const getUsers = (req = request, res = response) => {
-  const params = req.query;
+const getUsers = async (req = request, res = response) => {
+  const { limit = 5, since = 0 } = req.query;
+  const query = {
+    state: true,
+  };
+
+
+  const [total, users] = await Promise.all([
+    UserModel.countDocuments(query),
+    UserModel.find(query).skip(Number(since))
+    .limit(Number(limit)),
+  ]);
+
   res.json({
-    status: 200,
-    message: "GET Peticion a mi appi",
-    params,
+    total,
+    users,
   });
 };
 
 const putUsers = async (req, res = response) => {
-
   const id = req.params.id;
-  const { _id,password, googleAcount,email, ...rest } = req.body;
+  const { _id, password, googleAcount, email, ...rest } = req.body;
 
   if (password) {
     const salt = await bcrypt.genSaltSync();
     rest.password = bcrypt.hashSync(password, salt);
   }
-
   const user = await UserModel.findByIdAndUpdate(id, rest);
-
   res.json({
-    status: 200,
-    message: "PUT Peticion a mi appi",
     user,
     id,
   });
@@ -40,15 +45,18 @@ const postUser = async (req, res = response) => {
 
   await user.save();
 
-  res.json({
-    usuario,
-  });
+  res.json(user);
 };
 
-const deleteUsers = (req, res = response) => {
+const deleteUsers = async (req, res = response) => {
+  const {id} = req.params;
+  const user = await UserModel.findByIdAndUpdate(id,{state:false})
+  // const user = await UserModel.findByIdAndDelete(id);
+  
+
+
   res.json({
-    status: 200,
-    message: "DELET Peticion a mi appi",
+    user
   });
 };
 
