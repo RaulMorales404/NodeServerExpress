@@ -1,5 +1,5 @@
-const RolesSchema = require("./../models/rol");
-const UserModel = require("./../models/usuarios");
+const RolesSchema = require("../models/rol");
+const UserModel = require("../models/usuarios");
 
 const validateExistEmail = async (email) => {
   const existEmail = await UserModel.findOne({ email });
