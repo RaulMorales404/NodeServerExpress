@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const Routesusers = require("./../routes/user");
+const RoutesUsers = require("./../routes/user");
+const RouterLogin = require('./../routes/login');
 const { conectionDB } =  require('./../database/config');
 
 class Server {
@@ -9,7 +10,9 @@ class Server {
     this.app = express();
     this.port = process.env.PORT;
     this.usersPath = "/api/usuarios";
-    this.routerUsers = Routesusers;
+    this.loginPath="/api/auth";
+    this.routerLogin = RouterLogin;
+    this.routerUsers = RoutesUsers;
   
     this.doConexionDB();
     this.middleware();
@@ -29,11 +32,13 @@ class Server {
   }
 
   routes() {
-    this.app.use(this.usersPath, this.routerUsers);
+    this.app.use(this.loginPath,this.routerLogin);
+    this.app.use(this.usersPath,this.routerUsers);
+  
   }
 
   listen() {
-    this.app.listen(this.port,'0.0.0.0',() => {
+    this.app.listen(this.port,() => {
       console.log("server", this.port);
     });
   }
