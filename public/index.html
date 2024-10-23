@@ -1,11 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso denegado</title>
-</head>
-<body>
-    Acceso denegado 
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>google Sing-In</title>
+  </head>
+  <body>
+    Google Sing-In
+    <hr />
+
+    <div
+      id="g_id_onload"
+      data-client_id="435174473120-ofkmurlqnu2n9pjd3gg7hm6fl8c47bfh.apps.googleusercontent.com"
+      data-auto_prompt="false"
+      data-callback="handleCredentialResponse"
+    ></div>
+    <div
+      class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left"
+    ></div>
+
+    <button id="google-SingOut">Cerrar sesion</button>
+
+
+    <script>
+      async function handleCredentialResponse(response) {
+        try {
+          const body = {
+            id_token: response.credential,
+          };
+
+          const res = await fetch("http://localhost:8080/api/auth/google", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          });
+        
+          // localStorage.setItem('email',res)
+
+          const token = await res.json();
+          const email = token.user.email;
+          localStorage.setItem('email',email)
+        } catch (error) {
+          console.log("Error::", error);
+        }
+      }
+
+      const button = document.getElementById('google-SingOut');
+
+    
+
+      button.onclick = ()=>{
+        console.log(google.accounts.id)
+        google.accounts.id.disableAutoSelect();
+        google.accounts.id.revoke(localStorage.getItem('email'), (done)=>{
+          localStorage.clear();
+          location.reload();
+        })
+      } 
+    </script>
+
+    <script src="https://accounts.google.com/gsi/client" async></script>
+  </body>
 </html>
