@@ -32,7 +32,7 @@ const hasActionRol = (...rols) => {
     }
     if (!rols.includes(req.user.rol)) {
       return res.status(403).json({
-        msj: `El servicio solo permite usduarios  con los siguientes roles ${rols}`,
+        msj: `El servicio solo permite estos roles ${rols}`,
       });
     }
     next();
