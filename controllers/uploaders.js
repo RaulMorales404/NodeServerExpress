@@ -42,9 +42,9 @@ const showImage = async (req = request, res = response) => {
 
   if (model.img) {
     const pathImage = path.join(__dirname, "../uploads", collection, model.img);
-    if (fs.existsSync(pathImage)) {
-      return res.sendFile(pathImage);
-    }
+    // if (fs.existsSync(pathImage)) {
+      return res.redirect(model.img);
+    // }
   }
 
   res.status(400).sendFile(ImgNotFoundPath);
@@ -99,7 +99,6 @@ const updateImage = async (req = request, res = response) => {
 
   if (model.img) {
     const pathImage = path.join(__dirname, "../uploads", collection, model.img);
-
     if (fs.existsSync(pathImage)) {
       fs.unlinkSync(pathImage);
     }
@@ -116,7 +115,6 @@ const updateImage = async (req = request, res = response) => {
 
 const updateImageClaudinari = async (req = request, res = response) => {
   const { collection, id } = req.params;
-  const archvio = req.files;
 
   let model;
   switch (collection) {
@@ -152,9 +150,6 @@ const updateImageClaudinari = async (req = request, res = response) => {
     const imageName =  separatorName[separatorName.length-1]
     const id_Public = imageName.split(".")[0];
      cloudinary.uploader.destroy(id_Public)
-
-
-   
   }
   const { tempFilePath } = req.files.archivo;
 
