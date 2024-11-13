@@ -19,7 +19,7 @@ const getCategories = async (req = request, res = response) => {
       msj:'Sin categorias aun',
     })
    }
-
+``
     res.json({
       msj: "GET - Categories",
       total,
