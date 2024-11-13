@@ -7,7 +7,7 @@ Este proyecto es una API REST construida con **Node.js** y **Express**, usando *
 - **Autenticación**: Autenticación de usuarios usando JWT, con opciones de registro mediante cuenta de Google.
 - **Validaciones**: Validaciones internas en ruteo y controladores para los diferentes casos y manejo de errores inesperados
 - **Gestión de usuarios**: Módulo para registro, inicio de sesión y CRUD completo de usuarios.
-- **Productos y categorías**: CRUD completo para gestionar productos y categorías.
+- **Productos y categorías**: CRUD completo para gestionar productos, imagenes y categorías.
 - **Roles**: Asignación y verificación de roles para gestionar permisos y accesos admin,user,ventas.
 
 ## Tecnologías
