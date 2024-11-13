@@ -42,10 +42,20 @@ const isValidateRol = async (rol = "") => {
   }
 };
 
+const validateCollectionExist = (collection ='',collectionsPermited=[]) => {
+
+  const includCollection = collectionsPermited.includes(collection);
+  if(!includCollection){
+    throw new Error(`Solo se permiten estas colecciones ${collectionsPermited}`)
+  }
+  return  true;
+}
+
 module.exports = {
   isValidateRol,
   validateExistEmail,
   validateProducExist,
   validateUserExistById,
   validateCategoriExist,
+  validateCollectionExist,
 };
